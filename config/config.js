@@ -1,0 +1,1 @@
+// Configuration générale (ports, clés, variables d'environnement, etc.)

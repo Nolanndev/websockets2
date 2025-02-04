@@ -1,0 +1,1 @@
+// Point d'entrée qui démarre le serveur HTTP et attache les WebSockets (ex: avec Socket.IO)
