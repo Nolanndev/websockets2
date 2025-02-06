@@ -1,0 +1,32 @@
+
+
+#join-form {
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    width: fit-content;
+
+    input[type="submit"] {
+        transition: transform 0.2s;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+}
+
+#container {
+    display: none;
+
+    #map {
+        border: 2px solid black;
+        width: 500px;
+        height: 500px;
+    }
+    #video {
+        width: 300px;
+        border: 1px solid #000;
+    }
+    
+}
