@@ -1,14 +1,17 @@
 import http from "http";
 import { Server } from "socket.io";
 
-import config from "../config/config.js";
-import { messageSocketTypes } from "../public/js/constants.js";
+import config from '../config/config.js';
+import {messageSocketTypes} from './constants.js';
 import app from "./app.js";
 import UserService from "./services/UserService.js";
 import logger from "./utils/logger.js";
+// import pino from 'pino';
+// const logger = pino();
 
 const server = http.createServer(app);
 const io = new Server(server);
+
 
 io.on("connection", (socket) => {
 	socket.on("message", (message) => {
