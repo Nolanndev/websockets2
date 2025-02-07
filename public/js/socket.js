@@ -1,5 +1,5 @@
 class SocketService {
-	constructor(customMessage, url = 'ws://localhost:8080') {
+	constructor(customMessage, url = "http://localhost:8080") {
 		this.url = url;
 		this.customMessage = customMessage;
 		this.socket = null;
@@ -8,57 +8,59 @@ class SocketService {
 	}
 
 	initializeSocket() {
-		this.socket = new WebSocket(this.url);
+		// Initialiser la connexion Socket.IO
+		this.socket = io(this.url);
 
-		this.socket.onopen = () => {
+		// Événement déclenché quand la connexion est établie
+		this.socket.on("connect", () => {
 
-			// Envoi du message personnalisé dès l'ouverture
+			// Envoyer un message personnalisé dès la connexion, si présent
 			if (this.customMessage) {
 				this.socket.send(this.customMessage);
 			}
 
-			// Envoi des messages en attente (le cas échéant)
+			// Envoyer les messages en attente (s'il y en a)
 			while (this.pendingMessages.length > 0) {
 				const message = this.pendingMessages.shift();
 				this.socket.send(message);
 				console.log(`Message en file d'attente envoyé : ${message}`);
 			}
-		};
+		});
 
-		// Gestion de la réception des messages
-		this.socket.onmessage = (event) => {
-            event.data.text()
-            .then(text => {
-                console.log("Message reçu depuis le serveur :", text);
-            })
-		};
+		// Réception des messages (événement par défaut 'message')
+		this.socket.on("message", (data) => {
+			console.log("Message reçu depuis le serveur :", data);
+		});
 
-		// Gestion des erreurs
-		this.socket.onerror = (error) => {
-			console.error("Erreur WebSocket :", error);
-		};
+		// Gestion des erreurs de connexion
+		this.socket.on("connect_error", (error) => {
+			console.error("Erreur de connexion Socket.IO :", error);
+		});
 
-		// Gestion de la fermeture de la connexion
-		this.socket.onclose = (event) => {
-			console.log("Connexion WebSocket fermée", event);
-		};
+		// Événement déclenché quand la connexion est fermée
+		this.socket.on("disconnect", (reason) => {
+			console.log("Connexion Socket.IO fermée :", reason);
+		});
 	}
 
+	// Méthode pour envoyer un message
 	sendMessage(message) {
-		if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+		// Vérifier si la socket est déjà connectée
+		if (this.socket && this.socket.connected) {
 			this.socket.send(message);
 			console.log(`Message envoyé : ${message}`);
 		} else {
-			// Ajoute le message à la file d'attente si le socket n'est pas prêt
+			// Mettre le message en attente si la connexion n'est pas encore établie
 			this.pendingMessages.push(message);
 			console.log(`Message mis en attente : ${message}`);
 		}
 	}
 
+	// Méthode pour fermer la connexion
 	closeConnection() {
 		if (this.socket) {
 			this.socket.close();
-			console.log("Fermeture de la connexion WebSocket demandée");
+			console.log("Fermeture de la connexion Socket.IO demandée");
 		}
 	}
 }

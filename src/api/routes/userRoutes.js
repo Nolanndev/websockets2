@@ -3,5 +3,5 @@
 import app from "../../app";
 
 app.get("/api/users", (req, res) => {
-  res.json({ message: "Liste des utilisateurs" });
+	res.json({ message: "Liste des utilisateurs" });
 });

@@ -1,54 +1,45 @@
-import http from 'http';
-import { WebSocketServer } from 'ws';
+import http from "http";
+import { Server } from "socket.io";
 
-import config from '../config/config.js';
-import { messageSocketTypes } from '../public/js/constants..js';
-import app from './app.js';
-import User from './models/User.js';
-import UserService from './services/UserService.js';
+import config from "../config/config.js";
+import { messageSocketTypes } from "../public/js/constants.js";
+import app from "./app.js";
+import UserService from "./services/UserService.js";
 import logger from "./utils/logger.js";
 
-
-
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const io = new Server(server);
 
+io.on("connection", (socket) => {
+	socket.on("message", (message) => {
+		message = JSON.parse(message);
 
-wss.on('connection', (ws, req) => {
-  logger.info(`Nouvelle connexion WebSocket depuis ${req.socket.remoteAddress}`);
-  
+		switch (message.type) {
+			case messageSocketTypes.JOIN:
+				UserService.addUser(socket.id, message);
+				break;
+			default:
+				logger.warn("message non reconnu");
+				break;
+		}
+	});
 
-  ws.on('message', (message) => {
-    message = JSON.parse(message)
-    console.log(messageSocketTypes.JOIN, message.type);
-    
+	socket.on("close", () => {
+		UserService.deleteUser(socket.id);
+		logger.info("Déconnexion WebSocket");
+	});
 
-    switch (parseInt(message.type)) {
-        case messageSocketTypes.JOIN:
-            // logger.log(message);
-            let user = new User(message);
-            UserService.addUser(socket.id, message);    
-            break;
-        default:
-            logger.warn('message non reconnu');
-            // logger.warn(message);
-            break;
-    }
+	socket.on("disconnect", () => {
+		UserService.deleteUser(socket.id);
+		logger.info("Déconnexion WebSocket");
+	});
 
-  });
-
-  ws.on('close', () => {
-    logger.info('Déconnexion WebSocket');
-  });
-
-  ws.on('error', (error) => {
-    logger.error(`Erreur WebSocket : ${error}`);
-  });
+	socket.on("error", (error) => {
+		logger.error(`Erreur WebSocket : ${error}`);
+	});
 });
-
-
 
 const PORT = config.port || process.env.PORT || 3000;
 server.listen(PORT, () => {
-  logger.info(`Serveur HTTP ${PORT}`);
+	logger.info(`Serveur HTTP ${PORT}`);
 });

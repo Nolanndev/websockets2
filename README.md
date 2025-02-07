@@ -1,6 +1,5 @@
 # Découverte des WEBSOCKETS
 
-
 ### Structure du projet V2
 
 ```text
@@ -53,5 +52,3 @@ real-time-app/
     ├── sockets/           # Tests pour la logique des WebSockets
     └── utils/             # Tests pour les utilitaires
 ```
-
-
