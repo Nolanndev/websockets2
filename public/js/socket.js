@@ -13,7 +13,6 @@ class SocketService {
 
 		// Événement déclenché quand la connexion est établie
 		this.socket.on("connect", () => {
-
 			// Envoyer un message personnalisé dès la connexion, si présent
 			if (this.customMessage) {
 				this.socket.send(this.customMessage);
@@ -23,13 +22,19 @@ class SocketService {
 			while (this.pendingMessages.length > 0) {
 				const message = this.pendingMessages.shift();
 				this.socket.send(message);
-				console.log(`Message en file d'attente envoyé : ${message}`);
 			}
 		});
 
 		// Réception des messages (événement par défaut 'message')
 		this.socket.on("message", (data) => {
-			console.log("Message reçu depuis le serveur :", data);
+			data = JSON.parse(data)
+			if (data.type === 8) {
+				let chatbox = document.getElementById('chatbox');
+				const message = document.createElement('p');
+				message.innerText = data.from + ' - ' + data.content;
+				chatbox.scrollTop = chatbox.scrollHeight;
+				chatbox.appendChild(message);
+			}
 		});
 
 		// Gestion des erreurs de connexion
@@ -48,11 +53,9 @@ class SocketService {
 		// Vérifier si la socket est déjà connectée
 		if (this.socket && this.socket.connected) {
 			this.socket.send(message);
-			console.log(`Message envoyé : ${message}`);
 		} else {
 			// Mettre le message en attente si la connexion n'est pas encore établie
 			this.pendingMessages.push(message);
-			console.log(`Message mis en attente : ${message}`);
 		}
 	}
 

@@ -1,57 +1,63 @@
-import { messageSocketTypes } from "./constants..js";
+import { messageSocketTypes } from "./constants.js";
 import MapService from "./map.js";
 import SocketService from "./socket.js";
+import VideoService from "./video-service.js";
 
 const formElement = document.getElementById("join-form");
 const containerElement = document.getElementById("container");
 const leaveElement = document.getElementById("leave");
-let usernameElement = document.querySelector('#join-form input[name="username"]');
-let chatElement = document.getElementById("chat");
+const usernameElement = document.querySelector('#join-form input[name="username"]');
+
 
 let username;
-let socket;
+let socketService;
 let mapService;
+let videoService;
 
+// 
 formElement.addEventListener("submit", (e) => {
 	e.preventDefault();
-
+	
+	
 	username = usernameElement.value;
+	socketService = new SocketService();
+
 	navigator.geolocation.getCurrentPosition((pos) => {
-		socket = new SocketService(
+		socketService.sendMessage(
 			JSON.stringify({
 				type: messageSocketTypes.JOIN,
 				username: username,
 				lat: pos.coords.latitude,
 				long: pos.coords.longitude,
-			}),
+			})
 		);
-
-		setInterval(() => {
-			fetch("/api/users")
-				.then((response) => response.json())
-				.then((data) => {
-					chatElement.innerHTML = '<ul>';
-					
-					data.forEach((user) => {
-						// console.log(user)
-						console.log(user.username, user.lat, user.long);
-						chatElement.innerHTML += `<li>${user.username} : ${user.lat}, ${user.long}</li>`
-					});
-
-					chatElement.innerHTML += '</ul>';
-				});
-		}, 1000);
+		mapService = new MapService(socketService, pos.coords.latitude, pos.coords.longitude);
 	});
 
+	videoService = new VideoService(socketService);
+	
 	formElement.style.display = "none";
 	containerElement.style.display = "block";
 
-	mapService = new MapService();
 });
 
 leaveElement.addEventListener("click", () => {
-	socket.socket.disconnect();
+	socketService.socket.disconnect();
 	mapService.stop();
+	videoService.stop();
 	containerElement.style.display = "none";
 	formElement.style.display = "block";
 });
+
+document.getElementById('chat').addEventListener('submit', sendMessage);
+function sendMessage(e) {
+	e.preventDefault();
+	let val = document.getElementById('message').value;
+	if (val === '') return;
+	socketService.sendMessage(JSON.stringify({
+		type: 8,
+		content: val,
+	}));
+	document.getElementById('message').value = '';
+	
+}

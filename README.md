@@ -1,4 +1,7 @@
-# Découverte des WEBSOCKETS
+
+# Discut
+
+Discut (prononcé "Discute") est une petite application de chatting en temps réel.
 
 ### Structure du projet V2
 

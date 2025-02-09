@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Websockets - découverte</title>
-		<link rel="stylesheet" href="css/style.css" />
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Discut' - Discutez en direct</title>
+    <link rel="stylesheet" href="css/style.css" />
 
-		<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Leaflet -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""
+    ></script>
 
-		<!-- Leaflet -->
-		<link
-			rel="stylesheet"
-			href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-			integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-			crossorigin=""
-		/>
-		<script
-			src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-			integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-			crossorigin=""
-		></script>
+    <!-- Socket.io -->
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Formulaire de connexion -->
+    <h1>Discut'</h1>
+    <form id="join-form">
+        <input
+            type="text"
+            placeholder="Votre username"
+            name="username"
+            required
+			autocomplete="false"
+            value="Nolann"
+        />
+        <input type="submit" value="Rejoindre" />
+    </form>
 
-		<!-- Socket.io -->
-		<script src="/socket.io/socket.io.js"></script>
-	</head>
-	<body>
-		<h1>Websockets</h1>
-		<form id="join-form">
-			<input
-				type="text"
-				placeholder="Votre username"
-				value="nolann"
-				name="username"
-				required
-			/>
-			<input type="submit" name="rejoindre" value="Rejoindre" />
-		</form>
+    <!-- Container principal -->
+    <div id="container">
+        <div id="content">
+            <!-- Carte -->
+            <div id="map"></div>
 
-		<div id="container">
-			<div id="user-interaction">
-				<div id="map"></div>
-				<div id="user-talk">
-					<video id="video" autoplay playsinline muted></video>
-					<div id="chat"></div>
-				</div>
-			</div>
-			<button id="leave">Quitter</button>
-		</div>
+            
+            <!-- Zone de chat -->
+            <form id="chat">
+                <h3>Chat</h3>
+                <div id="chatbox" style="border:1px solid black; width: 300px; height: 200px; overflow-y: scroll;"></div>
+                <input type="text" id="message" placeholder="Entrez votre message">
+                <button id="sendMessage" type="submit">Envoyer</button>
+            </form>
 
-		<script src="js/main.js" type="module"></script>
-	</body>
+            <div>
+                <!-- Liste des utilisateurs -->
+                <div class="users-panel">
+                    <h3>Utilisateurs connectés</h3>
+                    <ul id="users"></ul>
+                </div>
+                <!-- Zone de vidéo -->
+                <div id="videos"></div> 
+            </div>
+        </div>
+
+        <!-- Bouton quitter -->
+        <button id="leave" class="leave-button">Quitter</button>
+    </div>
+
+    <!-- Notifications -->
+    <div id="notifications" class="notifications"></div>
+
+    <!-- Scripts -->
+    <!-- <script src="js/constants.js" type="module"></script>
+    <script src="js/chat-service.js" type="module"></script>
+    <script src="js/video-service.js" type="module"></script>
+    <script src="js/socket.js" type="module"></script>
+    <script src="js/map.js" type="module"></script> -->
+    <script src="js/main.js" type="module"></script>
+</body>
 </html>
