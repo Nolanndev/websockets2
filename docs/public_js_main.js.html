@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: public/js/main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: public/js/main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Importation des constantes et des services nécessaires :
+ * - messageSocketTypes : enumération décrivant les types de messages Socket
+ * - MapService : gère l'affichage et les interactions avec la carte
+ * - SocketService : gère la connexion et la communication via Socket.IO
+ * - VideoService : gère la diffusion/streaming vidéo
+ */
+import { messageSocketTypes } from "./constants.js";
+import MapService from "./map.js";
+import SocketService from "./socket.js";
+import VideoService from "./video-service.js";
+
+/**
+ * Récupération des éléments du DOM :
+ * - Le formulaire de connexion (join-form)
+ * - Le conteneur principal (container)
+ * - Le bouton permettant de se déconnecter (leave)
+ * - Le champ de saisi du nom d'utilisateur (username)
+ */
+const formElement = document.getElementById("join-form");
+const containerElement = document.getElementById("container");
+const leaveElement = document.getElementById("leave");
+const usernameElement = document.querySelector(
+	'#join-form input[name="username"]',
+);
+
+/**
+ * Variables globales pour stocker :
+ * - le nom d'utilisateur
+ * - l'instance du SocketService
+ * - l'instance du MapService
+ * - l'instance du VideoService
+ */
+let username;
+let socketService;
+let mapService;
+let videoService;
+
+/**
+ * Événement déclenché lors de la soumission du formulaire "join-form"
+ * - Empêche le rafraîchissement de la page
+ * - Récupère le nom d'utilisateur saisi
+ * - Initialise le socketService (connexion Socket.IO)
+ * - Récupère la position géographique de l'utilisateur
+ * - Envoie un message de type JOIN avec le nom d'utilisateur et sa position
+ * - Instancie et initialise le MapService (affichage de la carte)
+ * - Instancie et initialise le VideoService (gestion vidéo)
+ * - Met à jour l'affichage (cache le formulaire et montre le conteneur principal)
+ */
+formElement.addEventListener("submit", (e) => {
+	e.preventDefault();
+
+	// Récupérer le nom d'utilisateur depuis le champ correspondant
+	username = usernameElement.value;
+
+	// Initialiser la connexion Socket.IO
+	socketService = new SocketService();
+
+	// Récupérer la position GPS
+	navigator.geolocation.getCurrentPosition((pos) => {
+		// Envoi d'un message de type JOIN via le socket
+		socketService.sendMessage(
+			JSON.stringify({
+				type: messageSocketTypes.JOIN,
+				username: username,
+				lat: pos.coords.latitude,
+				long: pos.coords.longitude,
+			}),
+		);
+
+		// Création et initialisation du service de carte
+		mapService = new MapService(
+			socketService,
+			pos.coords.latitude,
+			pos.coords.longitude,
+		);
+	});
+
+	// Création et initialisation du service vidéo
+	videoService = new VideoService(socketService);
+
+	// Gestion de l'affichage : on masque le formulaire et on affiche le conteneur
+	formElement.style.display = "none";
+	containerElement.style.display = "block";
+});
+
+/**
+ * Événement déclenché lors du clic sur le bouton "leave"
+ * - Déconnecte le socket
+ * - Arrête les services de carte et de vidéo
+ * - Met à jour l'affichage (masque le conteneur et réaffiche le formulaire)
+ */
+leaveElement.addEventListener("click", () => {
+	// Déconnexion du socket
+	socketService.socket.disconnect();
+
+	// Arrêt de la carte et de la vidéo
+	mapService.stop();
+	videoService.stop();
+
+	// Mise à jour de l'affichage
+	containerElement.style.display = "none";
+	formElement.style.display = "block";
+});
+
+/**
+ * Ajout d'un écouteur sur le formulaire "chat"
+ * - On appelle la fonction sendMessage lors de la soumission
+ */
+document.getElementById("chat").addEventListener("submit", sendMessage);
+
+/**
+ * Fonction pour envoyer un message via le socket
+ * @param {Event} e - Événement de soumission du formulaire
+ */
+function sendMessage(e) {
+	e.preventDefault();
+
+	// Récupère le contenu du message
+	let val = document.getElementById("message").value;
+
+	// Vérifie si le champ est vide
+	if (val === "") return;
+
+	// Envoi d'un message de type 8 (chat) via le socket
+	socketService.sendMessage(
+		JSON.stringify({
+			type: 8,
+			content: val,
+		}),
+	);
+
+	// Réinitialise le champ de texte
+	document.getElementById("message").value = "";
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="MapService.html">MapService</a></li><li><a href="SocketService.html">SocketService</a></li><li><a href="VideoService.html">VideoService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#PORT">PORT</a></li><li><a href="global.html#Reset">Reset</a></li><li><a href="global.html#UserService">UserService</a></li><li><a href="global.html#addUser">addUser</a></li><li><a href="global.html#app">app</a></li><li><a href="global.html#buildLogMessage">buildLogMessage</a></li><li><a href="global.html#deleteUser">deleteUser</a></li><li><a href="global.html#error">error</a></li><li><a href="global.html#formElement">formElement</a></li><li><a href="global.html#getUser">getUser</a></li><li><a href="global.html#getUsers">getUsers</a></li><li><a href="global.html#handleChatMessage">handleChatMessage</a></li><li><a href="global.html#handleDisconnect">handleDisconnect</a></li><li><a href="global.html#handleJoin">handleJoin</a></li><li><a href="global.html#info">info</a></li><li><a href="global.html#io">io</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#logger">logger</a></li><li><a href="global.html#messageSocketTypes">messageSocketTypes</a></li><li><a href="global.html#outputLog">outputLog</a></li><li><a href="global.html#plus">plus</a></li><li><a href="global.html#removeUser">removeUser</a></li><li><a href="global.html#sendMessage">sendMessage</a></li><li><a href="global.html#server">server</a></li><li><a href="global.html#terminalColor">terminalColor</a></li><li><a href="global.html#username">username</a></li><li><a href="global.html#users">users</a></li><li><a href="global.html#warn">warn</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Feb 10 2025 01:26:50 GMT+0100 (heure normale d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

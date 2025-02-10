@@ -89,3 +89,9 @@ Pour quitter la discussion, vous devez cliquer sur le bouton 'quitter' en bas de
     ├─ server.js
     └─ constants.js
 ```
+
+## Documentation technique
+
+La documentation technique complète se trouve dans le répertoire _docs/_
+
+Pour y a voir accès, ouvrir le fichier _index.html_ dans votre navigateur, ou lancer un serveur http depuis le répertoire.

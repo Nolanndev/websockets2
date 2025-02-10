@@ -1,0 +1,14 @@
+{
+	"tags": {
+		"allowUnknownTags": true
+	},
+	"source": {
+		"include": ["src", "public"],
+		"exclude": ["node_modules"]
+	},
+	"opts": {
+		"destination": "./docs",
+		"recurse": true,
+		"readme": "./README.md"
+	}
+}
