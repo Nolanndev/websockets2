@@ -25,7 +25,6 @@ Ce projet combine l'utilisation de **Node.js**, **Express**, **Socket.IO** et **
 - **Authentification simple via socket** : Lorsqu'un utilisateur rejoint, son nom et sa position géographique sont envoyés au serveur via Socket.IO.
 - **Carte interactive** : Grâce à Leaflet, chaque utilisateur connecté est représenté par un marqueur mis à jour en temps réel.
 - **Chat en temps réel** : Les utilisateurs peuvent discuter instantanément. Les messages sont diffusés via Socket.IO.
-- **Préparation pour le chat vidéo** : La structure du code inclut les types de messages (CALL_REQUEST, WEBRTC_OFFER, etc.) pour éventuellement gérer un appel vidéo.
 - **Logs** : Le système de logs est configurable pour afficher des logs colorés en console et les enregistrer dans un fichier texte.
 
 ---
