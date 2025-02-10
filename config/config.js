@@ -1,9 +1,7 @@
 // Configuration générale
 
-const port = 8080;
-
 const config = {
-	port: port,
+	port: 8080,
 };
 
 export default config;

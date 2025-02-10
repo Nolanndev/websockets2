@@ -2,7 +2,6 @@
 	display: none;
 }
 
-
 #map {
 	width: 300px;
 	height: 300px;
@@ -13,21 +12,21 @@
 	width: 300px;
 	height: 200px;
 	overflow-y: scroll;
-    padding-bottom: 2rem;
+	padding-bottom: 2rem;
 }
 
 #videos {
-    width: fit-content;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 1rem;
-    overflow: hidden;
-    outline: 2px solid gray;
+	width: fit-content;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 1rem;
+	overflow: hidden;
+	outline: 2px solid gray;
 }
 
 video {
-    width: 400px;
-    height: 300px;
+	width: 400px;
+	height: 300px;
 }

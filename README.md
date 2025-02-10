@@ -1,57 +1,91 @@
-
 # Discut
 
-Discut (prononcé "Discute") est une petite application de chatting en temps réel.
+Discut (prononcé "Discute") est une petite application de chatting en temps réel. Vous pouvez discuter et voir les autres partipants en temps réel sur la carte.
 
-### Structure du projet V2
+Ce projet combine l'utilisation de **Node.js**, **Express**, **Socket.IO** et **Leaflet** pour créer une application de chatting en temps réel.
+
+- **Express** sert des routes API et des fichiers statiques (client web).
+- **Socket.IO** gère la communication temps réel pour le chat, la synchronisation des positions et la gestion des appels vidéo (préparation WebRTC).
+- **Leaflet** affiche une carte dynamique où sont placés des marqueurs pour chaque utilisateur connecté.
+
+---
+
+## Sommaire
+
+1. [Fonctionnalités](#fonctionnalités)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Utilisation](#utilisation)
+5. [Arborescence du projet](#arborescence-du-projet)
+
+---
+
+## Fonctionnalités
+
+- **Authentification simple via socket** : Lorsqu'un utilisateur rejoint, son nom et sa position géographique sont envoyés au serveur via Socket.IO.
+- **Carte interactive** : Grâce à Leaflet, chaque utilisateur connecté est représenté par un marqueur mis à jour en temps réel.
+- **Chat en temps réel** : Les utilisateurs peuvent discuter instantanément. Les messages sont diffusés via Socket.IO.
+- **Préparation pour le chat vidéo** : La structure du code inclut les types de messages (CALL_REQUEST, WEBRTC_OFFER, etc.) pour éventuellement gérer un appel vidéo.
+- **Logs** : Le système de logs est configurable pour afficher des logs colorés en console et les enregistrer dans un fichier texte.
+
+---
+
+## Installation
+
+1. **Cloner le dépôt**
+
+    ```bash
+    git clone https://github.com/Nolanndev/websockets2.git
+    cd websockets2
+    ```
+
+2. Installer les dépendances
+
+    ```bash
+    npm install
+    ```
+
+3. Démarrer le serveur
+
+    ```bash
+    npm run start
+    ```
+
+## Utilisation
+
+1. Lancer le serveur.
+2. Ouvrir le navigateur sur <http://localhost:8080>.
+
+### Rejoindre la discussion
+
+Lorsque vous lancez le serveur, vous arrivez sur une page qui vous demande un nom d'utilisateur. Saisissez le votre pour rejoindre la discussion globale.
+
+### Voir les autres participants sur la carte
+
+Vous pouvez voir en temps réel la position des autres participants sur une carte interactive. Vous pouvez voir les noms d'utilisateur de chaque participant en survolant leur point sur la carte.
+
+### Enovyer des messages
+
+Pour envoyer des messages dans le chat, vous devez simplement entrer le message que vous voulez envoyer dans l'input associé et soumettre le formulaire d'envoi. Le message sera alors envoyé à tous les participants.
+
+### Quitter la discussion
+
+Pour quitter la discussion, vous devez cliquer sur le bouton 'quitter' en bas de la page. Vous serez alors déconnectés de la discussion.
+
+## Architecture
 
 ```text
-real-time-app/
-├── package.json
-├── README.md
-├── config/
-│   └── index.js           # Configuration générale (ports, clés, variables d'environnement, etc.)
-├── src/
-│   ├── app.js             # Configuration et initialisation de l'application Express (middlewares, parsers, routes)
-│   ├── server.js          # Point d'entrée qui démarre le serveur HTTP et attache les WebSockets (ex: avec Socket.IO)
-│   ├── api/               # Logique REST de l’application
-│   │   ├── routes/
-│   │   │   ├── userRoutes.js         # Routes pour la gestion des utilisateurs
-│   │   │   ├── locationRoutes.js     # Routes pour la géolocalisation (historique, etc.)
-│   │   │   ├── accelerometerRoutes.js# Routes pour récupérer ou historiser les données d’accéléromètre
-│   │   │   └── videoRoutes.js        # Routes éventuelles pour la partie visioconférence (par exemple pour gérer la signalisation)
-│   │   ├── controllers/
-│   │   │   ├── userController.js
-│   │   │   ├── locationController.js
-│   │   │   ├── accelerometerController.js
-│   │   │   └── videoController.js
-│   │   └── services/
-│   │       ├── userService.js
-│   │       ├── locationService.js     # Logique métier pour traiter les mises à jour de positions
-│   │       ├── accelerometerService.js# Logique métier pour traiter les données d’accéléromètre
-│   │       └── videoService.js        # Logique métier pour la signalisation ou le contrôle de la visioconférence
-│   ├── sockets/           # Gestion des WebSockets pour la communication temps réel
-│   │   ├── index.js                # Initialisation de la connexion Socket.IO et répartition vers les modules dédiés
-│   │   ├── locationSocket.js       # Gestion des événements liés aux positions GPS (ex: "updateLocation")
-│   │   ├── accelerometerSocket.js  # Gestion des événements des accéléromètres (ex: "updateAccelerometer")
-│   │   └── videoSocket.js          # Gestion des événements pour la visioconférence (ex: "video-offer", "video-answer", "candidate")
-│   ├── models/            # Modèles de données (pour une base de données, par exemple avec Mongoose)
-│   │   ├── user.js
-│   │   ├── location.js
-│   │   └── accelerometer.js
-│   └── utils/             # Fonctions utilitaires (logger, helpers, etc.)
-│       └── logger.js
-├── public/                # Fichiers statiques (HTML, CSS, JS côté client, images, etc.)
-│   ├── index.html
-│   ├── js/
-│   │   ├── main.js         # Initialisation générale côté client
-│   │   ├── map.js          # Logique d'affichage et de mise à jour de la carte
-│   │   └── video.js        # Gestion de la visioconférence côté client
-│   ├── css/
-│   │   └── style.css
-│   └── assets/            # Autres ressources (images, icônes, etc.)
-└── tests/                 # Tests unitaires et d'intégration
-    ├── api/               # Tests pour les routes, controllers et services
-    ├── sockets/           # Tests pour la logique des WebSockets
-    └── utils/             # Tests pour les utilitaires
+.
+├── config/             // configuration du projet
+│   └─ config.js
+├── public/             // côté client
+│   ├─ css/
+│   ├─ js/
+│   └─ index.html
+└── src/                // côté serveur
+    ├─ services/
+    ├─ utils/
+    ├─ app.js
+    ├─ server.js
+    └─ constants.js
 ```

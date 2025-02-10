@@ -1,13 +1,11 @@
+/**
+ * Définit différents types de messages pouvant être échangés via un socket.
+ * Cela permet de mieux structurer la logique des échanges (exemple : chat, appels WebRTC).
+ */
 export const messageSocketTypes = {
-    MESSAGE: 1,
-    JOIN: 2,
-    LEAVE: 3,
-    CALL_REQUEST: 4,      // Demande d'appel
-    CALL_ACCEPT: 5,       // Acceptation d'appel
-    CALL_REJECT: 6,       // Refus d'appel
-    CALL_END: 7,          // Fin d'appel
-    CHAT_MESSAGE: 8,      // Message de chat
-    WEBRTC_OFFER: 9,      // Offre WebRTC
-    WEBRTC_ANSWER: 10,    // Réponse WebRTC
-    ICE_CANDIDATE: 11     // Candidat ICE pour WebRTC
+	MESSAGE: 1, // Message générique
+	JOIN: 2, // Un utilisateur rejoint la session
+	LEAVE: 3, // Un utilisateur quitte la session
+
+	CHAT_MESSAGE: 8, // Message de chat "classique"
 };
