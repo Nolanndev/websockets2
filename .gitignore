@@ -1,2 +1,4 @@
 node_modules/
 logs/
+.env*
+nolann.parcheminer.caen.mds-project.fr.conf

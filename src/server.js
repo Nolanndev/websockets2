@@ -54,6 +54,23 @@ io.on("connection", (socket) => {
 		}
 	});
 
+	// Réception de l'offre WebRTC
+	socket.on("webrtc-offer", (offer, senderId) => {
+		socket.broadcast.emit("webrtc-offer", offer, senderId);
+	});
+
+	// Réception de la réponse WebRTC
+	socket.on("webrtc-answer", (answer, senderId) => {
+		socket.broadcast.emit("webrtc-answer", answer, senderId);
+	});
+
+	// Échange des ICE Candidates
+	socket.on("webrtc-ice-candidate", (candidate, senderId) => {
+		socket.broadcast.emit("webrtc-ice-candidate", candidate, senderId);
+	});
+
+	socket.on("chat-message", (message) => handleChatMessage(socket, message));
+
 	/**
 	 * Événement "disconnect" :
 	 * - Se déclenche lorsque le client se déconnecte

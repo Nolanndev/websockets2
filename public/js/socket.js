@@ -15,7 +15,7 @@ class SocketService {
 	 * @param {string} customMessage - Message personnalisé à envoyer lors de la connexion
 	 * @param {string} url - L'URL du serveur Socket.IO
 	 */
-	constructor(customMessage, url = "http://localhost:8080") {
+	constructor(customMessage, url = "ws://localhost:8080") {
 		// Stocker l'URL du serveur
 		this.url = url;
 

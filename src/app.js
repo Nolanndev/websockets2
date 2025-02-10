@@ -22,7 +22,10 @@ const app = express();
 
 // Active la gestion du Cross-Origin Resource Sharing, permettant à des clients
 // d'autres domaines d'accéder à l'API.
-app.use(cors());
+app.use(cors({
+	origin: "*",
+	methods: "GET",
+}));
 
 // Permet de parser automatiquement le corps des requêtes HTTP au format JSON
 // et de le stocker dans req.body.

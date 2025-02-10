@@ -1,18 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+
+* {
+	font-family: 'Fira Code';	
+}
+
+h1 {
+	text-align: center;
+	text-transform: capitalize;
+}
+
+#join-form {
+	border: 1px solid black;
+	padding: 1rem;width: fit-content;
+	margin: auto;
+	margin-top: 3rem;
+	border-radius: .5rem;
+}
+
 #container {
 	display: none;
 }
 
 #map {
-	width: 300px;
+	border: 1px solid black;
+	border-radius: 1rem;
+	overflow: hidden;
+	width: 25%;
 	height: 300px;
+}
+
+#content {
+	display: flex;
+	gap: 1rem;
+	justify-content: space-around;
+	align-items: center;
+	padding: 1rem;
+}
+
+#chat {
+	border: 1px solid black;
+	border-radius: 1rem;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
 }
 
 #chatbox {
 	border: 1px solid black;
+	border-radius: .5rem;
 	width: 300px;
 	height: 200px;
 	overflow-y: scroll;
 	padding-bottom: 2rem;
+}
+
+#chat_form {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: .5rem;
+}
+
+#chat_form input {
+	width: 100%;
 }
 
 #videos {
@@ -27,6 +80,12 @@
 }
 
 video {
-	width: 400px;
-	height: 300px;
+	max-width: 100%;
+	max-width: 400px;
+	/* width: 400px;
+	height: 300px; */
+}
+
+#users {
+	list-style-type: none;
 }
